@@ -1,10 +1,11 @@
 import "./App.css";
 import Banner from "./component/Banner";
+import Contact from "./component/Contact";
 
 function App() {
   return (
     <div className="App">
-      <Banner />
+      <Contact />
     </div>
   );
 }
