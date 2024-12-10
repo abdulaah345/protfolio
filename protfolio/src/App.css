@@ -224,44 +224,31 @@ p.danger {
   font-size: 45px;
   font-weight: 700;
 }
+.skill h5 {
+  margin-top: 20px;
+}
 .skill p {
   color: #b8b8b8;
   font-size: 18px;
   letter-spacing: 0.8px;
-  transition: 0.3s ease-in-out;
-}
-.contact form input:focus,
-.contact form textarea:focus {
-  background: rgba(255, 255, 255, 1);
-  color: #121212;
-}
-.contact form input::placeholder,
-.contact form textarea::placeholder {
-  font-size: 16px;
-  font-weight: 400;
-  color: #fff;
+  line-height: 1.5em;
+  margin: 14px 0 75px 0;
 }
 .skill-slider {
   width: 80%;
   margin: 0 auto;
   position: relative;
 }
-.contact form button:hover {
-  color: #fff;
+.skill-slider .item img {
+  width: 50%;
+  margin: 0 auto 15px auto;
 }
-.contact form button::before {
-  content: "";
-  background: #121212;
-  width: 0;
-  height: 100%;
+.background-image-left {
+  top: 28%;
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  transition: 0.3s ease-in-out;
-}
-.contact form button:hover::before {
-  width: 100%;
+  bottom: 0;
+  width: 40%;
+  z-index: -4;
 }
 
 /**/
