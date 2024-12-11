@@ -14,8 +14,26 @@ function Contact() {
 
   const [formDetails, setFormDetails] = useState(formInitialDetails);
   const [buttonText, setButtonText] = useState("Send");
+  const [buttonTextcomment, setButtonTextcomment] = useState("Add comment");
   const [status, setStatus] = useState(null);
-  const [formErrors, setFormErrors] = useState({}); // حالة الأخطاء
+  const [formErrors, setFormErrors] = useState({});
+  const [comments, setComments] = useState([]); // إدارة التعليقات
+  const [newComment, setNewComment] = useState(""); // تعليق جديد
+
+  // Load comments from localStorage when the component mounts
+  useEffect(() => {
+    const savedComments = JSON.parse(localStorage.getItem("comments"));
+    if (savedComments) {
+      setComments(savedComments);
+    }
+  }, []);
+
+  // Save comments to localStorage whenever comments change
+  useEffect(() => {
+    if (comments.length > 0) {
+      localStorage.setItem("comments", JSON.stringify(comments));
+    }
+  }, [comments]);
 
   const onFormUpdate = (category, value) => {
     setFormDetails({
@@ -26,7 +44,6 @@ function Contact() {
 
   const validateForm = () => {
     let errors = {};
-    // التحقق من صحة الحقول
     if (!formDetails.firstName) errors.firstName = "First Name is required.";
     if (!formDetails.lastName) errors.lastName = "Last Name is required.";
     if (!formDetails.email) errors.email = "Email is required.";
@@ -38,51 +55,59 @@ function Contact() {
     if (!formDetails.message) errors.message = "Message is required.";
 
     setFormErrors(errors);
-    return Object.keys(errors).length === 0; // إذا كانت هناك أخطاء نعيد false
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // التحقق من صحة الحقول قبل الإرسال
     if (!validateForm()) {
       setButtonText("Send");
-      return; // إذا كانت هناك أخطاء، لا نكمل الإرسال
+      return;
     }
 
-    setButtonText("Sending..."); // تغيير النص إلى "Sending..."
+    setButtonText("Sending...");
 
     emailjs
       .send(
-        "service_dupkusd", // استبدل بـ Service ID الخاص بك
-        "template_htkatt8", // استبدل بـ Template ID الخاص بك
+        "service_dupkusd",
+        "template_htkatt8",
         formDetails,
-        "Uy57P5CxwyrwEn7BF" // استبدل بـ User ID الخاص بك
+        "Uy57P5CxwyrwEn7BF"
       )
       .then(
         (result) => {
           console.log(result.text);
           setStatus({ success: true, message: "Message sent successfully!" });
-          setButtonText("Send"); // إعادة النص إلى "Send" بعد النجاح
-          setFormDetails(formInitialDetails); // إعادة ضبط الفورم
+          setButtonText("Send");
+          setFormDetails(formInitialDetails);
         },
         (error) => {
           console.error(error.text);
           setStatus({ success: false, message: "Failed to send message." });
-          setButtonText("Send"); // إعادة النص إلى "Send" بعد الفشل
+          setButtonText("Send");
         }
       );
   };
 
-  // استخدام useEffect لإخفاء التنبيه بعد 3 ثوانٍ
   useEffect(() => {
     if (status) {
       const timer = setTimeout(() => {
         setStatus(null);
-      }, 3000); // 3 ثوانٍ
-      return () => clearTimeout(timer); // تنظيف المؤقت عند التغيير
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [status]);
+
+  const handleAddComment = () => {
+    if (newComment.trim()) {
+      const updatedComments = [...comments, newComment];
+      setComments(updatedComments);
+      setNewComment(""); // مسح الحقل
+      setButtonTextcomment("Added");
+      setTimeout(() => setButtonTextcomment("Add Comment"), 3000);
+    }
+  };
 
   return (
     <section className="contact" id="connect">
@@ -171,6 +196,24 @@ function Contact() {
                   </button>
                 </Col>
               </Row>
+              <h3>Comments</h3>
+              <div className="comments-section">
+                <ul>
+                  {comments.map((comment, index) => (
+                    <li key={index}>{comment}</li>
+                  ))}
+                </ul>
+                <textarea
+                  rows="3"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Add your comment..."
+                  required
+                ></textarea>
+                <button type="button" onClick={handleAddComment}>
+                  <span>{buttonTextcomment}</span>
+                </button>
+              </div>
             </form>
           </Col>
         </Row>
