@@ -112,10 +112,7 @@ function Contact() {
   return (
     <section className="contact" id="connect">
       <Container>
-        <Row className="align-items-center">
-          <Col size={12} md={6}>
-            <img src={contactImg} alt="Contact Us" />
-          </Col>
+        <Row className="align-items-center justify-content-center">
           <Col size={12} md={6}>
             <h2>Get In Touch</h2>
             {status && (
