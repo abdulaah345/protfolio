@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Alert, Col, Container, Row } from "react-bootstrap"; // استيراد Alert
 import emailjs from "emailjs-com"; // استيراد EmailJS
-import contactImg from "../assets/img/contact-img.svg";
 
 function Contact() {
   const formInitialDetails = {
