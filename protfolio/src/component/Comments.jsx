@@ -3,6 +3,15 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import colorSharp from "../assets/img/color-sharp.png";
 import { useState, useEffect } from "react";
+import { db } from "./firebase"; // Import Firebase
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
+
 const Comments = () => {
   const responsive = {
     superLargeDesktop: {
@@ -23,60 +32,74 @@ const Comments = () => {
     },
   };
 
-  const [comments, setComments] = useState([]); // إدارة التعليقات
-  const [newComment, setNewComment] = useState(""); // تعليق جديد
+  const [comments, setComments] = useState([]); // Manage comments
+  const [newComment, setNewComment] = useState(""); // New comment
   const [buttonTextcomment, setButtonTextcomment] = useState("Add comment");
+
+  // Fetch comments from Firestore on component mount
   useEffect(() => {
-    const savedComments = JSON.parse(localStorage.getItem("comments"));
-    if (savedComments) {
-      setComments(savedComments);
-    }
+    const fetchComments = async () => {
+      try {
+        const commentsRef = collection(db, "comments");
+        const q = query(commentsRef, orderBy("timestamp", "desc"));
+        const querySnapshot = await getDocs(q);
+        const loadedComments = querySnapshot.docs.map((doc) => doc.data().text);
+        setComments(loadedComments);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+    fetchComments();
   }, []);
 
-  // Save comments to localStorage whenever comments change
-  useEffect(() => {
-    if (comments.length > 0) {
-      localStorage.setItem("comments", JSON.stringify(comments));
-    }
-  }, [comments]);
-
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (newComment.trim()) {
-      const updatedComments = [...comments, newComment];
-      setComments(updatedComments);
-      setNewComment(""); // مسح الحقل
-      setButtonTextcomment("Added");
-      setTimeout(() => setButtonTextcomment("Add Comment"), 500);
+      try {
+        const commentsRef = collection(db, "comments");
+        await addDoc(commentsRef, {
+          text: newComment,
+          timestamp: new Date(),
+        });
+        setComments([newComment, ...comments]); // Optimistic update
+        setNewComment(""); // Clear input
+        setButtonTextcomment("Added");
+        setTimeout(() => setButtonTextcomment("Add Comment"), 500);
+      } catch (error) {
+        console.error("Error adding comment:", error);
+      }
     }
   };
-<style>
 
-   
-</style>
-  
   return (
     <section className="comments-section" id="skills">
       <Container>
         <Row>
           <Col className="skill-bx">
-            <Carousel responsive={responsive} infinite={true} className="skill-slider">
-              
-                  {comments.map((comment, index) => (
-                    <div key={index} className="carousel-item">{comment}</div>
-                  ))}
-             
+            <Carousel
+              responsive={responsive}
+              infinite={true}
+              className="skill-slider"
+            >
+              {comments.map((comment, index) => (
+                <div key={index} className="carousel-item">
+                  {comment}
+                </div>
+              ))}
             </Carousel>
             <textarea
-                  rows="3"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Add your comment..."
-                  required
-                >
-            </textarea>
-                <button type="button" onClick={handleAddComment} className="commentButton">
-                  <span>{buttonTextcomment}</span>
-                </button>
+              rows="3"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Add your comment..."
+              required
+            />
+            <button
+              type="button"
+              onClick={handleAddComment}
+              className="commentButton"
+            >
+              <span>{buttonTextcomment}</span>
+            </button>
           </Col>
         </Row>
       </Container>
