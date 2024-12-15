@@ -192,24 +192,6 @@ function Contact() {
                   </button>
                 </Col>
               </Row>
-              <h3>Comments</h3>
-              <div className="comments-section">
-                <ul>
-                  {comments.map((comment, index) => (
-                    <li key={index}>{comment}</li>
-                  ))}
-                </ul>
-                <textarea
-                  rows="3"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Add your comment..."
-                  required
-                ></textarea>
-                <button type="button" onClick={handleAddComment}>
-                  <span>{buttonTextcomment}</span>
-                </button>
-              </div>
             </form>
           </Col>
         </Row>

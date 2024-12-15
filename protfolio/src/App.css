@@ -1,3 +1,9 @@
+:root {
+  --primary-color: #ff0000;
+  --secondary-color: #000000;
+  --third-color: #4f4f4f;
+  --fourth-color: #3c3c4380;
+}
 @font-face {
   font-family: Centra;
   src: url("./assets/font/CentraNo2-Bold.ttf");
@@ -150,6 +156,10 @@ p.danger {
 }
 .banner img {
   animation: updown 3s linear infinite;
+  border-radius: 50%;
+}
+.banner .wrap {
+  color: var(--primary-color);
 }
 @keyframes updown {
   0% {
@@ -421,8 +431,8 @@ p.danger {
 }
 .contact form button {
   font-weight: 700;
-  color: #000;
-  background-color: #fff;
+  color: #ffffff;
+  background-color: var(--primary-color);
   padding: 14px 48px;
   font-size: 18px;
   margin-top: 25px;
@@ -452,21 +462,8 @@ p.danger {
   width: 100%;
 }
 
-.carousel-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background-color: #f0f0f0; /* Example styling */
-  border-radius: 5px;
-  color: #000;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 20px;
-  margin-left: 1px;
-}
 .comments-section input,
 .comments-section textarea {
- 
   width: 100%;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -498,8 +495,8 @@ p.danger {
 }
 .comments-section .commentButton {
   font-weight: 700;
-  color: #000;
-  background-color: #fff;
+  color: #fff;
+  background-color: var(--primary-color);
   padding: 14px 48px;
   font-size: 18px;
   margin-top: 25px;
@@ -527,4 +524,99 @@ p.danger {
 }
 .comments-section .commentButton:hover::before {
   width: 100%;
+}
+.carousel-item {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 10px;
+}
+
+.comment-email {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.comment-text {
+  margin: 0;
+  line-height: 1.5;
+}
+.comment-box {
+  position: relative;
+  width: 100%;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin: 20px auto;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comment-box .comment-content {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+.comment-box strong {
+  display: block;
+  font-size: 16px;
+  color: var(--primary-color);
+  margin-bottom: 5px;
+}
+
+.comment-box p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Adding the triangle at the bottom */
+.comment-box::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 20px; /* Adjust for placement */
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #f8f9fa;
+}
+.star {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.star.filled {
+  color: gold;
+}
+
+.rating-input {
+  margin: 10px 0;
+}
+.comment-box {
+  position: relative;
+  text-align: center;
+}
+
+.comment-image {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.comment-image img {
+  width: 100%; /* ملائمة الصورة لحجم الـ div */
+  height: 100%; /* ملائمة الصورة لحجم الـ div */
+  object-fit: cover; /* الحفاظ على تناسب الصورة داخل الدائرة */
+}
+
+.comment-content {
+  margin-top: 20px; /* مسافة بين الصورة والنص */
 }

@@ -34,6 +34,8 @@ const Comments = () => {
 
   const [comments, setComments] = useState([]); // Manage comments
   const [newComment, setNewComment] = useState(""); // New comment
+  const [email, setEmail] = useState(""); // Email input
+  const [rating, setRating] = useState(0); // Rating input
   const [buttonTextcomment, setButtonTextcomment] = useState("Add comment");
 
   // Fetch comments from Firestore on component mount
@@ -43,7 +45,7 @@ const Comments = () => {
         const commentsRef = collection(db, "comments");
         const q = query(commentsRef, orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(q);
-        const loadedComments = querySnapshot.docs.map((doc) => doc.data().text);
+        const loadedComments = querySnapshot.docs.map((doc) => doc.data());
         setComments(loadedComments);
       } catch (error) {
         console.error("Error fetching comments:", error);
@@ -53,15 +55,20 @@ const Comments = () => {
   }, []);
 
   const handleAddComment = async () => {
-    if (newComment.trim()) {
+    if (newComment.trim() && email.trim() && rating > 0) {
       try {
         const commentsRef = collection(db, "comments");
-        await addDoc(commentsRef, {
+        const newCommentData = {
           text: newComment,
+          email: email,
+          rating: rating,
           timestamp: new Date(),
-        });
-        setComments([newComment, ...comments]); // Optimistic update
-        setNewComment(""); // Clear input
+        };
+        await addDoc(commentsRef, newCommentData);
+        setComments([newCommentData, ...comments]); // Optimistic update
+        setNewComment(""); // Clear comment input
+        setEmail(""); // Clear email input
+        setRating(0); // Reset rating
         setButtonTextcomment("Added");
         setTimeout(() => setButtonTextcomment("Add Comment"), 500);
       } catch (error) {
@@ -82,17 +89,54 @@ const Comments = () => {
             >
               {comments.map((comment, index) => (
                 <div key={index} className="carousel-item">
-                  {comment}
+                  <div className="comment-box">
+                    <div className="comment-content">
+                      <div className="comment-image">
+                        <img src="src\assets\img\dot.jpg" alt="User" />
+                      </div>
+                      <strong>{comment.email}</strong>
+                      <p>{comment.text}</p>
+                      <div className="rating">
+                        <span style={{ color: "gold" }}>
+                          {"★".repeat(comment.rating)}
+                        </span>
+                        <span style={{ color: "ddd" }}>
+                          {"☆".repeat(5 - comment.rating)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </Carousel>
+            <input
+              name="name"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your Name..."
+              required
+              className="emailInput"
+            />
             <textarea
               rows="3"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add your comment..."
+              placeholder="Add your comment (max 30 characters)..."
+              maxLength="30"
               required
             />
+            <div className="rating-input">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  onClick={() => setRating(star)}
+                  className={`star ${rating >= star ? "filled" : ""}`}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
             <button
               type="button"
               onClick={handleAddComment}
