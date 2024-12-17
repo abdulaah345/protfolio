@@ -39,25 +39,23 @@ const Skills = () => {
               className="skill-slider"
             >
               <div className="item">
-                <img src="" alt="image" />
+                <img src="src\assets\img\image_fx_ (7).jpg" alt="image" />
                 <h5>Web development</h5>
               </div>
               <div className="item">
-                <img src="" alt="image" />
+                <img
+                  src="src\assets\img\photo_5985604322676818903_y.jpg"
+                  alt="image"
+                />
 
-                <h5>Web development</h5>
+                <h5>Video Editing</h5>
               </div>
               <div className="item">
-                <img src="" alt="image" />
-                <h5>Web development</h5>
-              </div>
-              <div className="item">
-                <img src="" alt="image" />
-                <h5>Web development</h5>
-              </div>
-              <div className="item">
-                <img src="" alt="image" />
-                <h5>Web development</h5>
+                <img
+                  src="src\assets\img\photo_5985604322676818905_y.jpg"
+                  alt="image"
+                />
+                <h5>Graphic Design</h5>
               </div>
             </Carousel>
           </Col>
